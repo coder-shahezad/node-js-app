@@ -1,7 +1,13 @@
 import App from "../../app";
+import { NextFunction, Request, Response } from "express";
+import { Workshop } from "@prisma/client";
 
-export class EventsService {
-  constructor(protected app: App) {}
+export class EventsService { 
+   workshops: [];
+
+  constructor(protected app: App) {
+    
+  }
 
   async getWarmupEvents() {
     return await this.app.getDataSource().event.findMany();
@@ -84,8 +90,8 @@ export class EventsService {
     ```
      */
 
-  async getEventsWithWorkshops() {
-    throw new Error('TODO task 1');
+  async getEventsWithWorkshops(req: Request, res: Response) {
+    return await this.app.getDataSource().event.findMany();
   }
 
   /* TODO: complete getFutureEventWithWorkshops so that it returns events with workshops, that have not yet started
@@ -154,7 +160,12 @@ export class EventsService {
     ]
     ```
      */
-  async getFutureEventWithWorkshops() {
-    throw new Error('TODO task 2');
+  async getFutureEventWithWorkshops(req: Request, res: Response) {
+    return (await this.app.getDataSource().event.findMany()).map(( ( futureEvent ) => {
+      const data = {...futureEvent, workshops: this.workshops };
+     const workshop = this.app.getDataSource().workshop.findFirst({ where: { eventId: futureEvent.id } })
+      data.workshops.push(workshop);
+      return data
+    }));
   }
 }

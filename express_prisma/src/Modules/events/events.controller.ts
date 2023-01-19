@@ -30,7 +30,7 @@ class EventController extends Controller {
     }
 
     async getEventsWithWorkshops(req: Request, res: Response, next: NextFunction) {
-        return await this.eventsService.getEventsWithWorkshops()
+        return await this.eventsService.getEventsWithWorkshops(req,res)
           .then((data) => {
               res.json(data);
           })
@@ -40,7 +40,7 @@ class EventController extends Controller {
     }
 
     async getFutureEventWithWorkshops(req: Request, res: Response, next: NextFunction) {
-        return await this.eventsService.getFutureEventWithWorkshops()
+        return await this.eventsService.getFutureEventWithWorkshops(req, res)
           .then((data) => {
               res.json(data);
           })
